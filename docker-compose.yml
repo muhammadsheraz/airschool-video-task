@@ -1,0 +1,67 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: sheraz
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: airvid
+    container_name: airvid-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+        - ./src:/var/www
+        - ./.docker/php:/usr/local/etc/php/conf.d  
+    tty: true
+    links:
+        - db          
+    networks:
+        - airvid
+
+  db:
+    image: mysql:5.7
+    container_name: airvid-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: airvids
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_PASSWORD: secret
+      MYSQL_USER: root
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+        - 3306:3306      
+    volumes:
+        - ./.docker/mysql:/var/lib/mysql
+    networks:
+        - airvid
+
+  nginx:
+    image: nginx:alpine
+    container_name: airvid-web
+    restart: unless-stopped
+    ports:
+        - 8000:80
+    volumes:
+        - ./src:/var/www
+        - ./.docker/nginx/conf.d:/etc/nginx/conf.d/
+    networks:
+        - airvid
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+        - '8080:80'
+    restart: always
+    environment:
+        PMA_HOST: db
+    networks:
+        - airvid       
+    depends_on:
+        - db      
+
+networks:
+    airvid:
+        driver: bridge
