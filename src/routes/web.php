@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VideosMainController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::group(['middleware' => ['web','auth']], function() {
+    Route::get('/', [VideosMainController::class,'index'])->name('videos.uploadVideo');
+
+    Route::get('createvideo', [VideosMainController::class,'createVideo'])->name('videos.createVideo');
+
+    Route::post('uploadvideo', [VideosMainController::class,'uploadVideo'])->name('videos.uploadVideo');
 });

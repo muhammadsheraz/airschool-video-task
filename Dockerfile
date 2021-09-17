@@ -1,4 +1,10 @@
+FROM node:latest AS node
 FROM php:7.4-fpm
+
+# Setting up npm 
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -8,9 +14,12 @@ ARG uid
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    nodejs \
+    npm \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    ffmpeg \
     zip \
     unzip
 
