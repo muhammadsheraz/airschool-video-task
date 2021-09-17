@@ -58,6 +58,7 @@ class VideosMainController extends Controller
     
             $video = new Video;
             $video->title = $request->title;
+            $video->description = $request->description;
     
             if ($request->hasFile('video'))
             {

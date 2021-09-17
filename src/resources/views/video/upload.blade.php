@@ -8,7 +8,7 @@
             <div class="ml-4 text-lg leading-7 font-semibold">
                 <section class="text-center">
                     <div class="container">
-                        <h1 class="heading">Upload Video</h1>
+                        <h1 class="heading">Upload Videos</h1>
                     </div>
                 </section>
             </div>
@@ -22,16 +22,14 @@
                         <label>Title</label>
                         <input class="form-control" type="text" name="title" placeholder="Enter Title">
                     </div>
-
                     <div class="form-group">
-                        <label for="exampleFormControlTextarea1">Video Description</label>
-                        <textarea class="form-control" id="description" rows="3"></textarea>
+                        <label for="description">Video Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                     </div>
-
                     <div class="form-group">
                         <label for="video">Select Video File</label>
-                        <input type="file" class="form-control-file" id="video">
-                    </div>
+                        <input type="file" class="form-control-file" id="video" name="video">
+                    </div>                    
                     <hr>
                     <button type="submit" class="btn btn-primary mb-2">Submit</button>
                 </form>

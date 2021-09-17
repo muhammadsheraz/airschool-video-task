@@ -28,7 +28,7 @@
                                             <tr>
                                                 <td><img src="https://dummyimage.com/50x50/55595c/fff" /> </td>
                                                 <td>{{ $video->title }}</td>
-                                                <td>--</td>
+                                                <td>{{ $video->description }}</td>
                                                 <td class="text-right">
                                                     <button id="videoPlay-{{ $video->id }}" value="{{ $video->id }}" 
                                                     class="btn btn-sm btn-danger video-play-btn" 
