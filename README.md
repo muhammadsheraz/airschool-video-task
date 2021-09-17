@@ -17,10 +17,10 @@ Coding task for technical evaluation by Air School
 
 
 
-# Post Installation Commands
+# Post Deployement Commands
 - git clone https://github.com/muhammadsheraz/airschool-video-task.git
 
-- docker-compose up --build
+- docker-compose up --build or docker-compose up --build -d (for background mode)
 
 - docker exec airvid-app composer install
 
