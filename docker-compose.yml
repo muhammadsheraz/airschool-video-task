@@ -28,7 +28,6 @@ services:
       MYSQL_DATABASE: airvids
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_PASSWORD: secret
-      MYSQL_USER: root
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     ports:

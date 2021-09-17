@@ -18,10 +18,24 @@ Coding task for technical evaluation by Air School
 
 
 # Post Installation Commands
+- git clone https://github.com/muhammadsheraz/airschool-video-task.git
 
-- Composer install
-- php artisan queue:table
-- php artisan migrate
-- php artisan vendor:publish --provider "Laravel\\Fortify\\FortifyServiceProvider"
-- php artisan vendor:publish --provider="ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider"
-- php artisan db:seed 
+- docker-compose up --build
+
+- docker exec airvid-app composer install
+
+- docker exec airvid-app cp .env.example .env
+
+- docker exec airvid-app php artisan key:generate
+
+- docker exec airvid-app php artisan vendor:publish --provider "Laravel\Fortify\FortifyServiceProvider"
+
+- docker exec airvid-app php artisan vendor:publish --provider="ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider"
+
+- docker exec airvid-app php artisan migrate
+
+- docker exec airvid-app php artisan db:seed
+
+- docker exec airvid-app php artisan view:clear
+
+- docker exec airvid-app php artisan config:cache
