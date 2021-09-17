@@ -5,17 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Video;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 
 use App\Jobs\ProcessVideoConversion;
-
-use Illuminate\Support\Facades\Storage as Storage;
-
-use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
-use ProtoneMedia\LaravelFFMpeg\Exporters\EncodingException;
-use FFMpeg\Format\Video\X264;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+
 
 class VideosMainController extends Controller
 {
@@ -54,42 +49,50 @@ class VideosMainController extends Controller
      */
     public function uploadVideo(Request $request)
     {
-        $validator = $this->validate($request, [
-            'title' => 'required|string|max:150',
-            'description' => 'string|max:500',
-            'video' => 'required|file|mimetypes:video/mp4',
-        ]);
-
-        $video = new Video;
-        $video->title = $request->title;
-
-        if ($request->hasFile('video'))
-        {
-            $videoFile = $request->file('video');
-
-            $path = $videoFile->store('public');
-
-            $video->video_path = $path;
-
-            $video->visibility = Video::VISIBILITY_PUBLIC;
-            $video->state = Video::STATE_DEFAULT;
-            $video->status = Video::STATUS_DRAFT;
-
-            $video->user_id = Auth::id();
-
-            $video->meta_data = collect([
-                'originalName' => $videoFile->getClientOriginalName(),
-                'ext' => $videoFile->extension(),
-                'mimeType' => $videoFile->getClientMimeType(),
-                'fileSize' => $videoFile->getSize()
-            ])->toJson();
+        try {
+            $this->validate($request, [
+                'title' => 'required|string|max:150',
+                'description' => 'string|max:500',
+                'video' => 'required|file|mimetypes:video/mp4',
+            ]);
+    
+            $video = new Video;
+            $video->title = $request->title;
+    
+            if ($request->hasFile('video'))
+            {
+                $videoFile = $request->file('video');
+    
+                $path = $videoFile->store('public');
+    
+                $video->video_path = $path;
+    
+                $video->visibility = Video::VISIBILITY_PUBLIC;
+                $video->state = Video::STATE_DEFAULT;
+                $video->status = Video::STATUS_DRAFT;
+    
+                $video->user_id = Auth::id();
+    
+                $video->meta_data = collect([
+                    'originalName' => $videoFile->getClientOriginalName(),
+                    'ext' => $videoFile->extension(),
+                    'mimeType' => $videoFile->getClientMimeType(),
+                    'fileSize' => $videoFile->getSize()
+                ])->toJson();
+            }
+    
+            $video->save();  
+    
+            // Dispatching the job to the queue, 
+            // so format conversion work will be processed asynchronously
+            ProcessVideoConversion::dispatch($video);
+    
+            Session::flash('success', 'Video uploaded successfully! It will be displayed here soon after background processing!'); 
+        } catch (\Exception $e) {
+            Session::flash('error', 'Something went wrong, please try again later'); 
+            
+            Log::info($e->getMessage());
         }
-
-        $video->save();  
-
-        // Dispatching the job to the queue, 
-        // so format conversion work will be processed asynchronously
-        ProcessVideoConversion::dispatch($video);
 
         return redirect('/');
    }

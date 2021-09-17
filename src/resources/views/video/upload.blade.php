@@ -8,7 +8,7 @@
             <div class="ml-4 text-lg leading-7 font-semibold">
                 <section class="text-center">
                     <div class="container">
-                        <h1 class="heading">Upload Videos</h1>
+                        <h1 class="heading">Upload Video</h1>
                     </div>
                 </section>
             </div>
@@ -18,16 +18,22 @@
             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
                 <form method="POST" action="{{ route('videos.uploadVideo') }}" enctype="multipart/form-data" >
                     {{ csrf_field() }}
-                    <div >
+                    <div class="form-group">
                         <label>Title</label>
-                        <input type="text" name="title" placeholder="Enter Title">
+                        <input class="form-control" type="text" name="title" placeholder="Enter Title">
                     </div>
-                    <div >
-                        <label>Choose Video</label>
-                        <input type="file"  name="video">
+
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Video Description</label>
+                        <textarea class="form-control" id="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="video">Select Video File</label>
+                        <input type="file" class="form-control-file" id="video">
                     </div>
                     <hr>
-                    <button type="submit" >Submit</button>
+                    <button type="submit" class="btn btn-primary mb-2">Submit</button>
                 </form>
             </div>
             
