@@ -1,12 +1,8 @@
-# AirSchool Video Task
-Coding task for technical evaluation by Air School
+# Laravel based video upload platofrm
+Coding challenge based on Laravel
 
 
-# Deadline: 
-17th September 2021
-
-
-# Task Details:
+# App Details:
 - Create a page where a user can upload videos.
 - Store the videos’ metadata in the database.
 - Once video uploading is completed, convert it into m3u8 format in the background.
